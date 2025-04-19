@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Job Tracker"
+    PROJECT_NAME: str = "Tracker"
     # DATABASE_URL: str = os.getenv("DATABASE_URL")
     # SECRET_KEY: str = os.getenv("SECRET_KEY")
     # CEREBRAS_API_KEY: str = os.getenv("CEREBRAS_API_KEY")
