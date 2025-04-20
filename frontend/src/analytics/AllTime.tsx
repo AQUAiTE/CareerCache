@@ -5,94 +5,165 @@ import {
   PaperProps,
   Text,
   useMantineTheme,
-} from '@mantine/core'
-import { IconDotsVertical } from '@tabler/icons-react'
-import Chart from 'react-apexcharts'
+  Center,
+  Loader,
+} from "@mantine/core";
+import { IconDotsVertical } from "@tabler/icons-react";
+import Chart from "react-apexcharts";
+import { useEffect, useState } from "react";
+import { EmailData } from "../dashboard/EmailTable";
+import Surface from "./Surface";
 
-import Surface from './Surface'
+type RevenueChartProps = PaperProps;
 
-type RevenueChartProps = PaperProps
+interface YearlyData {
+  applied: number;
+  interviews: number;
+  offers: number;
+  rejections: number;
+}
 
-export default function AllTimeAnalytics ({ ...others }: RevenueChartProps) {
-  const theme = useMantineTheme()
+export default function AllTimeAnalytics({ ...others }: RevenueChartProps) {
+  const theme = useMantineTheme();
+  const [yearlyData, setYearlyData] = useState<Record<string, YearlyData>>({});
+  const [years, setYears] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/email/get_db");
+        const data: EmailData[] = await response.json();
+        const processedData: Record<string, YearlyData> = {};
+
+        data.forEach((email) => {
+          const year = new Date(email.received).getFullYear().toString();
+          if (!processedData[year]) {
+            processedData[year] = {
+              applied: 0,
+              interviews: 0,
+              offers: 0,
+              rejections: 0,
+            };
+          }
+
+          switch (email.status) {
+            case "APPLIED":
+              processedData[year].applied++;
+              break;
+            case "INTERVIEW":
+              processedData[year].interviews++;
+              break;
+            case "OFFER":
+              processedData[year].offers++;
+              break;
+            case "REJECTED":
+              processedData[year].rejections++;
+              break;
+          }
+        });
+
+        const sortedYears = Object.keys(processedData).sort();
+        setYears(sortedYears);
+        setYearlyData(processedData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Surface component={Paper} {...others} style={{ borderRadius: 15 }}>
+        <Center h={400}>
+          <Loader />
+        </Center>
+      </Surface>
+    );
+  }
 
   const series = [
     {
-      name: 'Applied',
-      data: [45,120,237,341,400,450,500],
+      name: "Applied",
+      data: years.map((year) => yearlyData[year]?.applied || 0),
     },
     {
-      name: 'Interviews',
-      data: [15,30,55,71,101,114,121],
+      name: "Interviews",
+      data: years.map((year) => yearlyData[year]?.interviews || 0),
     },
     {
-      name: 'Offers',
-      data: [1,3,5,5,8,9,12],
-    }
-  ]
+      name: "Offers",
+      data: years.map((year) => yearlyData[year]?.offers || 0),
+    },
+    {
+      name: "Rejected",
+      data: years.map((year) => yearlyData[year]?.rejections || 0),
+    },
+  ];
 
   const options: any = {
     chart: {
       height: 350,
-      type: 'area',
-      fontFamily: 'Open Sans, sans-serif',
+      type: "area",
+      fontFamily: "Open Sans, sans-serif",
     },
     dataLabels: {
       enabled: false,
     },
     stroke: {
-      curve: 'smooth',
+      curve: "smooth",
     },
     xaxis: {
-      type: 'category',
-      categories: [
-        '2018',
-        '2019',
-        '2020',
-        '2021',
-        '2022',
-        '2023',
-        '2024',
-      ],
+      type: "category",
+      categories: years,
       labels: {
         style: {
-          colors: theme.white
+          colors: theme.white,
         },
       },
     },
     yaxis: {
       labels: {
         style: {
-          colors: theme.colors.green
+          colors: theme.colors.green,
         },
       },
     },
     tooltip: {
       x: {
-        format: 'dd/MM/yy HH:mm',
+        format: "yyyy",
       },
     },
     colors: [
       theme.colors[theme.primaryColor][5],
       theme.colors.cyan[9],
-      theme.colors.green[9]
+      theme.colors.green[9],
+      theme.colors.red[9],
     ],
     legend: {
       labels: {
         colors: theme.white,
       },
     },
-  }
+  };
 
   return (
-    <Surface component={Paper} {...others} style={{
-      borderRadius: 15
-    }}>
-      <Group justify='space-between' mb='md'>
-        <Text size='lg' fw={600} pl={10}>
+    <Surface
+      component={Paper}
+      {...others}
+      style={{
+        borderRadius: 15,
+      }}
+    >
+      <Group justify="space-between" mb="md">
+        <Text size="lg" fw={600} pl={10}>
           Applications All-Time
         </Text>
-        <ActionIcon variant='subtle'>
+        <ActionIcon variant="subtle">
           <IconDotsVertical size={16} />
         </ActionIcon>
       </Group>
@@ -100,10 +171,10 @@ export default function AllTimeAnalytics ({ ...others }: RevenueChartProps) {
       <Chart
         options={options}
         series={series}
-        type='area'
+        type="area"
         height={350}
-        width={'100%'}
+        width={"100%"}
       />
     </Surface>
-  )
+  );
 }
