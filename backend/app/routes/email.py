@@ -6,7 +6,7 @@ import json
 from backend.app.services.email_services import fetch_email_info
 
 from backend.app.services.llm_service import classify_email, extract_application_details
-from backend.app.services.db_service import insert_email_record, fetch_all_records
+from backend.app.services.db_service import insert_email_record, fetch_all_records, fetch_status_counts
 
 from typing import List
 import base64
@@ -95,6 +95,18 @@ async def get_db():
         response = fetch_all_records()
 
         return response['data']
+
+    except Exception as e:
+        print(f"An issue in db: {e}")
+        return {"status": "error"}
+    
+@router.get("/group_by_status")
+async def get_status_count():
+    try:
+
+        response = fetch_status_counts()
+
+        return response
 
     except Exception as e:
         print(f"An issue in db: {e}")
