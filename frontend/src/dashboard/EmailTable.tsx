@@ -31,7 +31,12 @@ export function EmailTable() {
     fetch("http://localhost:8000/email/get_db")
       .then((res) => res.json())
       .then((json) => {
-        setData(json);
+        const sortedData = [...json].sort((a, b) => {
+          return (
+            new Date(b.received).getTime() - new Date(a.received).getTime()
+          );
+        });
+        setData(sortedData);
         setLoading(false);
       })
       .catch((err) => {

@@ -34,10 +34,14 @@ export default function AllTimeAnalytics({ ...others }: RevenueChartProps) {
       try {
         const response = await fetch("http://localhost:8000/email/get_db");
         const data: EmailData[] = await response.json();
+
+        // Process data by year
         const processedData: Record<string, YearlyData> = {};
 
+        // First, count occurrences by year
         data.forEach((email) => {
           const year = new Date(email.received).getFullYear().toString();
+
           if (!processedData[year]) {
             processedData[year] = {
               applied: 0,
@@ -63,7 +67,27 @@ export default function AllTimeAnalytics({ ...others }: RevenueChartProps) {
           }
         });
 
+        // Sort years chronologically
         const sortedYears = Object.keys(processedData).sort();
+
+        // Calculate cumulative totals
+        let cumulativeApplied = 0;
+        let cumulativeInterviews = 0;
+        let cumulativeOffers = 0;
+        let cumulativeRejections = 0;
+
+        sortedYears.forEach((year) => {
+          cumulativeApplied += processedData[year].applied;
+          cumulativeInterviews += processedData[year].interviews;
+          cumulativeOffers += processedData[year].offers;
+          cumulativeRejections += processedData[year].rejections;
+
+          processedData[year].applied = cumulativeApplied;
+          processedData[year].interviews = cumulativeInterviews;
+          processedData[year].offers = cumulativeOffers;
+          processedData[year].rejections = cumulativeRejections;
+        });
+
         setYears(sortedYears);
         setYearlyData(processedData);
         setLoading(false);
@@ -161,7 +185,7 @@ export default function AllTimeAnalytics({ ...others }: RevenueChartProps) {
     >
       <Group justify="space-between" mb="md">
         <Text size="lg" fw={600} pl={10}>
-          Applications All-Time
+          Applications All-Time (Cumulative)
         </Text>
         <ActionIcon variant="subtle">
           <IconDotsVertical size={16} />
