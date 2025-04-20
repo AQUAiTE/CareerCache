@@ -34,11 +34,8 @@ export default function AllTimeAnalytics({ ...others }: RevenueChartProps) {
       try {
         const response = await fetch("http://localhost:8000/email/get_db");
         const data: EmailData[] = await response.json();
-
-        // Process data by year
         const processedData: Record<string, YearlyData> = {};
 
-        // First, count occurrences by year
         data.forEach((email) => {
           const year = new Date(email.received).getFullYear().toString();
 
@@ -67,10 +64,7 @@ export default function AllTimeAnalytics({ ...others }: RevenueChartProps) {
           }
         });
 
-        // Sort years chronologically
         const sortedYears = Object.keys(processedData).sort();
-
-        // Calculate cumulative totals
         let cumulativeApplied = 0;
         let cumulativeInterviews = 0;
         let cumulativeOffers = 0;
