@@ -9,6 +9,8 @@ import AllTimeAnalytics from './analytics/AllTime'
 import ThirtyDaysAnalytics from './analytics/ThirtyDays'
 import SixMonthsAnalytics from './analytics/SixMonths'
 import PastYearAnalytics from './analytics/PastYear'
+import Dashboard from './dashboard/Dashboard'
+import Analytics from './analytics/Analytics'
 
 export default function App() {
   return (
@@ -26,10 +28,12 @@ export default function App() {
             }
             >
             <Route index element={<Home />} />
+            <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/thirty-days' element={<ThirtyDaysAnalytics />} />
             <Route path='/six-months' element={<SixMonthsAnalytics />} />
             <Route path='/year' element={<PastYearAnalytics />} />
             <Route path='/alltime' element={<AllTimeAnalytics />} />
+            <Route path='/analytics' element={<Analytics/>} />
           </Route>
         </Routes>
       </BrowserRouter>

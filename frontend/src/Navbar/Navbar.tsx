@@ -6,6 +6,7 @@ import {
   IconCalendarStats,
   IconGauge,
   IconPresentationAnalytics,
+  IconStar,
 } from '@tabler/icons-react'
 import { AppShell, Box, Group, ScrollArea, ThemeIcon, UnstyledButton, useMantineTheme } from '@mantine/core'
 
@@ -14,7 +15,8 @@ import { LinksGroup } from './NavbarLinksGroup'
 import { NavLink } from 'react-router-dom'
 
 const tabs = [
-  { label: 'Dashboard', icon: IconGauge, link: '/' },
+  { label: 'Welcome', icon: IconStar, link: '/' },
+  { label: 'Dashboard', icon: IconGauge, link: '/dashboard' },
   {
     label: 'Time Analytics',
     icon: IconCalendarStats,
