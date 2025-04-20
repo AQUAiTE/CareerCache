@@ -35,5 +35,24 @@ def fetch_all_records():
     except Exception as e:
         print(f"Issue returning db {e}")
 
+def fetch_status_counts():
+    try:
+        # Fetch all statuses
+        response = supabase.table("job_email").select("status").execute()
+        if response.data:
+            from collections import Counter
+            counts = Counter(row['status'] for row in response.data)
+            # Ensure all statuses are present
+            all_statuses = ['REJECTED', 'APPLIED', 'OFFER', 'INTERVIEW']
+            status_counts = {status: counts.get(status, 0) for status in all_statuses}
+            return {"status_counts": status_counts}
+        else:
+            return {"message": "No data found"}
+    except Exception as e:
+        print(f"Issue returning db {e}")
+        return {"error": str(e)}
+
+
+
     
 
