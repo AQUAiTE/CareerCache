@@ -6,7 +6,7 @@ import json
 from backend.app.services.email_services import fetch_email_info
 
 from backend.app.services.llm_service import classify_email, extract_application_details
-from backend.app.services.db_service import insert_email_record
+from backend.app.services.db_service import insert_email_record, fetch_all_records
 
 from typing import List
 import base64
@@ -88,13 +88,24 @@ async def invoke(request: Request):
         print(f"An error occurred while calling LLM : {e}")
         return {"status": "error"}
     
+@router.get("/get_db")
+async def get_db():
+    try:
+
+        response = fetch_all_records()
+
+        return response['data']
+
+    except Exception as e:
+        print(f"An issue in db: {e}")
+        return {"status": "error"}
+
+
 @router.post("/db")
 async def add_db():
 
     try:
         insert_email_record(company="apple", status="APPLIED", role="tech support")
-
-        fetch_email_info()
 
         return {"status": "success"}
 

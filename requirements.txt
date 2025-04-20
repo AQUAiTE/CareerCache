@@ -8,3 +8,4 @@ python-dotenv
 pydantic-settings
 
 cerebras_cloud_sdk
+supabase

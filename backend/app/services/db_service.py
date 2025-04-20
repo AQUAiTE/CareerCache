@@ -17,12 +17,12 @@ def insert_email_record(company, status, role):
             "id": str(uuid.uuid4()),
             "receiver": "8f3c4d2e-41e7-4e63-a3c1-6f1d73a1d233",
             "company": company,
-            "received": now.strftime("%Y-%m-%d %H:%M"),
+            "received": now.strftime("%Y-%m-%d"),
             "status": status,  # Make sure this matches your ENUM type
             "role": role
         }
         response = supabase.table("job_email").insert(data).execute()
-        print(response)
+        # print(response)
     except Exception as e:
         print(f"Issue adding to db {e}")
 
@@ -30,9 +30,8 @@ def insert_email_record(company, status, role):
 # Query records
 def fetch_all_records():
     try:
-        response = supabase.table("job_email").select("*").execute()
-        for record in response.data:
-            print(record)
+        response = supabase.table("job_email").select("company, received, status, role").execute()
+        return {"data": response.data}
     except Exception as e:
         print(f"Issue returning db {e}")
 
