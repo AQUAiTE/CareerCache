@@ -1,40 +1,15 @@
-import { Container, Title, Paper, Grid } from '@mantine/core';
+import { Container, Title, Paper, Grid, Center, Loader } from '@mantine/core';
 import ReactApexChart from 'react-apexcharts';
 import { EmailData } from '../dashboard/EmailTable';
+import { useEffect, useState } from 'react';
 
-const mockData: EmailData[] = [
-  {
-    dateReceived: '2024-04-20',
-    company: 'Tommy\'s Toontown',
-    status: 'APPLICATION CONFIRMED',
-  },
-  {
-    dateReceived: '2024-04-19',
-    company: 'John\'s Joyrides',
-    status: 'INTERVIEW REQUESTED',
-  },
-  {
-    dateReceived: '2024-04-18',
-    company: 'Dino\'s Diner',
-    status: 'JOB OFFERED',
-  },
-  {
-    dateReceived: '2024-04-17',
-    company: 'Brian\'s Bakery',
-    status: 'APPLICATION CONFIRMED',
-  },
-  {
-    dateReceived: '2024-04-16',
-    company: 'Eugene\'s Emporium',
-    status: 'INTERVIEW REQUESTED',
-  },
-];
 
 const calculateChartData = (data: EmailData[]) => {
   const totals: Record<EmailData['status'], number> = {
-    'APPLICATION CONFIRMED': 0,
-    'INTERVIEW REQUESTED': 0,
-    'JOB OFFERED': 0,
+    'APPLIED': 0,
+    'INTERVIEW': 0,
+    'REJECTED': 0,
+    'OFFER': 0,
   };
 
   data.forEach((item) => {
@@ -57,7 +32,31 @@ const calculateChartData = (data: EmailData[]) => {
 };
 
 export default function Analytics() {
-  const { totals, percentages } = calculateChartData(mockData);
+  const [data, setData] = useState<EmailData[]>([]);
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      fetch("http://localhost:8000/email/get_db")
+        .then((res) => res.json())
+        .then((json) => {
+          setData(json);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Error fetching data:", err);
+          setLoading(false);
+        });
+    }, []);
+  
+    if (loading) {
+      return (
+        <Center h={400}>
+          <Loader />
+        </Center>
+      );
+    }
+
+  const { totals, percentages } = calculateChartData(data);
 
   const totalChartOptions = {
     chart: {
