@@ -84,7 +84,7 @@ def fetch_email_info():
 
 # helper functions for fetching message ids
 def _get_message_ids(service):
-    from app.main import app
+    from backend.app.main import app
     try:
         history = service.users().history().list(
             userId='me',

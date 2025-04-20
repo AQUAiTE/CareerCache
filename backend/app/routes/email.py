@@ -17,9 +17,9 @@ async def get_mail():
 
     return {"message": "Mail fetched successfully"}
 
-@router.post("/notification")
+@router.post("/nonification")
 async def notifications(request: Request):
-    from app.main import app
+    from backend.app.main import app
 
     try:
         data = await request.json()
@@ -36,6 +36,7 @@ async def notifications(request: Request):
 
         # set new history ID so that we only fetch new emails
         app.state.historyId = new_history_id
+        print(f"NEW: {app.state.historyId}")
 
         # Fetch email details using Gmail API here
         return {"status": "success"}
