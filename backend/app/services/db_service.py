@@ -43,7 +43,7 @@ def fetch_status_counts():
             from collections import Counter
             counts = Counter(row['status'] for row in response.data)
             # Ensure all statuses are present
-            all_statuses = ['REJECTED', 'APPLIED', 'OFFER', 'INTERVIEW']
+            all_statuses = a
             status_counts = {status: counts.get(status, 0) for status in all_statuses}
             return {"status_counts": status_counts}
         else:
