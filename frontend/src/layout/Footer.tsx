@@ -7,13 +7,19 @@ export default function Footer() {
 
   return (
     isMobile ? (
-      <AppShell.Footer p='sm' bg={theme.colors.dark[8]}>
+      <AppShell.Footer p='sm' style={{
+        borderRadius: 10,
+        background: `linear-gradient(45deg, ${theme.colors.dark[8]}, ${theme.colors.dark[5]})`,
+        height: 50
+      }}>
         Made using React + Mantine &lt;3
       </AppShell.Footer>
     ) : (
-      <AppShell.Footer p='sm' bg={theme.colors.dark[8]} style={{
+      <AppShell.Footer p='sm' style={{
           width: 'calc(100% - 200px)',
-          marginLeft: '200px'
+          marginLeft: '200px',
+          borderRadius: 10,
+          background: `linear-gradient(45deg, ${theme.colors.dark[8]}, ${theme.colors.dark[5]})`,
         }}
       >
         Made using React + Mantine &lt;3

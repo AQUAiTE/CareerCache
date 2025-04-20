@@ -1,12 +1,13 @@
-import { AppShell } from '@mantine/core'
+import { AppShell, useMantineTheme } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 
 import Header from './Header'
 import Footer from './Footer'
-import Main from './Main'
 import Navbar from '../Navbar/Navbar'
+import { Outlet } from 'react-router-dom'
 
 export default function MainLayout() {
+  const theme = useMantineTheme()
   const [opened, { toggle }] = useDisclosure()
 
   return (
@@ -18,10 +19,15 @@ export default function MainLayout() {
         collapsed: { mobile: !opened },
       }}
       padding="md"
+      style={{
+        background: `linear-gradient(45deg, ${theme.colors.cyan[9]}, ${theme.colors.cyan[5]})`,
+      }}
     >
       <Header opened={opened} toggle={toggle}/>
-      <Navbar />
-      <Main />
+      <Navbar toggle={toggle} />
+      <AppShell.Main pb={50}>
+        <Outlet />
+      </AppShell.Main>
       <Footer />
     </AppShell>
   )

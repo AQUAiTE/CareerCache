@@ -6,9 +6,9 @@
   color: var(--mantine-color-text);
   font-size: var(--mantine-font-size-sm);
 
-  @mixin hover {
-    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
-    color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
+  &:hover {
+    background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-dark-6));  /* Blue background */
+    color: light-dark(var(--mantine-color-blue-6), var(--mantine-color-dark-0));  /* Blue text */
   }
 }
 
@@ -23,10 +23,18 @@
   color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
   border-left: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 
-  @mixin hover {
-    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
-    color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
+  &:hover {
+    background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-dark-6));  /* Blue background */
+    color: light-dark(var(--mantine-color-blue-6), var(--mantine-color-dark-0));  /* Blue text */
   }
+}
+
+.sololink {
+  font-weight: 500;
+  display: block;
+  text-decoration: none;
+  font-size: var(--mantine-font-size-sm);
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
 }
 
 .chevron {
