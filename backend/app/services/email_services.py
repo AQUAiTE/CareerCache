@@ -132,34 +132,54 @@ def _batch_get_messages(service, message_ids):
     # Execute any remaining requests
     if len(messages) % batch_size != 0:
         batch.execute()
-    
+    # print(messages)
     return messages
 
 
 
+import base64
+
 def _format_messages(messages):
     """
-    Parses the message json and 
+    Parses the message JSON and 
     returns a list of dictionaries with the following fields:
-    - body: The email body
+    - body: The full email body
     - subject: The email subject
     - sender: The email sender
     """
+    def get_body(payload):
+        # Case 1: Simple emails without parts
+        if 'parts' not in payload:
+            data = payload['body'].get('data')
+            if data:
+                return base64.urlsafe_b64decode(data).decode('utf-8', errors='ignore')
+
+        # Case 2: Multipart emails
+        for part in payload.get('parts', []):
+            if part.get('mimeType') == 'text/plain':
+                data = part['body'].get('data')
+                if data:
+                    return base64.urlsafe_b64decode(data).decode('utf-8', errors='ignore')
+
+        return "(No body found)"
+
     try:
         formatted_messages = []
         for message_data in messages:
-            
-            message = {}
-            message['body'] = message_data['snippet']
+            message = {
+                'body': get_body(message_data['payload']),
+                'subject': None,
+                'sender': None
+            }
 
             for header in message_data["payload"]["headers"]:
-                if header["name"] == "From":
+                if header["name"].lower() == "from":
                     message['sender'] = header["value"]
-                
-                if header["name"] == "Subject":
+                elif header["name"].lower() == "subject":
                     message['subject'] = header["value"]
 
             formatted_messages.append(message)
-        return formatted_messages   
+
+        return formatted_messages
     except Exception as e:
         print(f"Error formatting messages: {e}")
