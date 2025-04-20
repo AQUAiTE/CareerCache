@@ -13,9 +13,39 @@ const mockData: EmailData[] = [
     status: "APPLICATION CONFIRMED",
   },
   {
+    dateReceived: "2024-04-20",
+    company: "Tommy's Toontown",
+    status: "APPLICATION CONFIRMED",
+  },
+  {
+    dateReceived: "2024-04-20",
+    company: "Tommy's Toontown",
+    status: "APPLICATION CONFIRMED",
+  },
+  {
     dateReceived: "2024-04-19",
     company: "John's Joyrides",
     status: "INTERVIEW REQUESTED",
+  },
+  {
+    dateReceived: "2024-04-19",
+    company: "John's Joyrides",
+    status: "INTERVIEW REQUESTED",
+  },
+  {
+    dateReceived: "2024-04-19",
+    company: "John's Joyrides",
+    status: "INTERVIEW REQUESTED",
+  },
+  {
+    dateReceived: "2024-04-18",
+    company: "Dino's Diner",
+    status: "JOB OFFERED",
+  },
+  {
+    dateReceived: "2024-04-18",
+    company: "Dino's Diner",
+    status: "JOB OFFERED",
   },
   {
     dateReceived: "2024-04-18",
