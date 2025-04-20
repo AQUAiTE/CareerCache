@@ -35,6 +35,7 @@ interface NavbarProps {
 
 export default function Navbar({ toggle }: NavbarProps) {
   const theme = useMantineTheme()
+  const isActive = (path: string) => location.pathname === path
 
   const links = tabs.map((tab) => 
     tab.links ? (
@@ -44,7 +45,11 @@ export default function Navbar({ toggle }: NavbarProps) {
         onLinkClick={toggle}
       />
     ) : (
-      <NavLink to={tab.link || '/'} className={classes.sololink} key={tab.label}>
+      <NavLink
+        to={tab.link || '/'}
+        className={`${classes.sololink} ${isActive(tab.link) ? classes.active : ''}`}
+        key={tab.label}
+      >
         <UnstyledButton key={tab.label} onClick={toggle} className={classes.control}>
           <Group justify="space-between" gap={0}>
             <Box style={{ display: 'flex', alignItems: 'center' }}>

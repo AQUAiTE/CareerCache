@@ -15,12 +15,13 @@ interface LinksGroupProps {
 export function LinksGroup({ icon: Icon, label, initiallyOpened, links, onLinkClick }: LinksGroupProps) {
   const hasLinks = Array.isArray(links)
   const [opened, setOpened] = useState(initiallyOpened || false)
+  const isActive = (path: string) => window.location.pathname === path
   const items = (hasLinks ? links : []).map((link) => (
     <Text
       component={NavLink}
       to={link.link}
       key={link.label}
-      className={classes.link}
+      className={`${classes.link} ${isActive(link.link) ? classes.active : ''}`}
       onClick={onLinkClick}
     >
       {link.label}

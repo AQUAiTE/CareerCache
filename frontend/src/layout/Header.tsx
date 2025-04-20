@@ -1,4 +1,4 @@
-import { AppShell, Burger, Text, useMantineTheme } from '@mantine/core'
+import { AppShell, Burger, Title, useMantineTheme } from '@mantine/core'
 
 export default function Header({opened, toggle}: {opened: boolean; toggle: () => void}) {
   const theme = useMantineTheme()
@@ -15,7 +15,7 @@ export default function Header({opened, toggle}: {opened: boolean; toggle: () =>
             hiddenFrom="sm"
             size="sm"
           />
-      <Text ml={10}>CareerCache</Text>
+      <Title pl={10}>CareerCache</Title>
     </AppShell.Header>
   )
 }
